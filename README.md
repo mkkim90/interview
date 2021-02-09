@@ -100,3 +100,13 @@
 
 •Querydsl의 Paging 기능이 성능이 얼마나 나오며, 성능 저하를 어떻게 해결할 수 있을까?
 
+• blocking vs non-blocking / synchronous vs asynchronous
+	Synchronous I/O와 Asynchtounous I/O
+		- 동기 : 작업을 요청한 후 작업의 결과가 나올 때까지 기다린 후 처리
+		- 비동기 : 직전 시스템 호출의 종료가 발생하면 그에 따른 처리를 진행
+		
+	Blocking I/O와 Non-Blocking I/O
+		- Blocking : 유저 프로세스가 시스템 호출을 하고 나서 결과가 반환되기까지 다음 처리로 넘어가지 않음
+		- Non-Blocking : 호출한 직후에 프로그램으로 제어가 돌아와서 시스템 호출의 종료를 기다리지 않고 다음 처리로 넘어갈 수 있음
+
+
