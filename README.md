@@ -161,4 +161,22 @@ Is - a 관계면 상속이 수월
 - 인터페이스로 분리하는 방식 
 
 
+## jvm 설명
+자바 가상 머신
+자바 코드로 작성한 프로그램은 실행할 환경에 독립적으로 실행할 수 있도록 해주는 역할을 하는 가상머신
+
+ java virtual machine의 줄임말이며 Java Byte Code를 OS에 맞게 해석 해주는 역할을 합니다.
+
+클래스 로더를 통해 컴파일을 하여 바이트코드로 만들어서 로드합니다.
+실행엔진의 인터프리터를 활용하여 바이트코드를 기계어로 번역하는 역할을 합니다. 
+그외로 저장공간 메모리, 네이티브 메소드 들로 이루어져있습니다. 
+
+
+JIT는 bytecode를 어셈블러 같은 nativecode로 바꿔서 실행이 빠르지만 
+역시 변환하는데 비용이 발생한다. 이 같은 이유 때문에 jvm은 모든 코드를 jit compiler 방식으로 실행하지 않고 
+interpreter 방식을 사용하다 일정 기준이 넘어가면 jit compiler 방식으로 실행한다.
+
+- JRE(Java Runtime Environment)
+- JDK(Java Development Kit)
+
 
