@@ -30,10 +30,10 @@
 
 
 ```
-Int fibonacci(int I) {
+int fibonacci(int I) {
 	If ( i == 0 ) return 0;
-	If ( I == 1 ) return 1;
-	return fibonacci(I -1) + fibonacci(I-2);
+	If ( i == 1 ) return 1;
+	return fibonacci(i -1) + fibonacci(i-2);
 }
 ```
 
@@ -43,12 +43,12 @@ int fibonacci(int n) {
 	return fibonacci(n, new int[n+1]);
 }
 
-int fibonacci(int I, int[] memo) {
-	if ( I == 0 || I == 1 ) return I;
-	if ( memo[I] == 0 ) {
-		memo[I] = fibonacci( I - 1, memo) + fibonacci(I-2, memo);
+int fibonacci(int i, int[] memo) {
+	if ( i == 0 || i == 1 ) return i;
+	if ( memo[i] == 0 ) {
+		memo[i] = fibonacci(i-1, memo) + fibonacci(i-2, memo);
 	}
-	return memo[I];
+	return memo[i];
 }
 ```
 
@@ -60,8 +60,8 @@ int fibonacci(int n) {
 	int[] memo = new int[n];
 	memo[0] = 0;
 	memo[1] = 1;
-	for ( int I = 2; I < n; I++ ) {
-		memo[I] = memo[I-1] + memo[I-2];
+	for ( int I = 2; i < n; I++ ) {
+		memo[i] = memo[i-1] + memo[i-2];
 	}
 	return memo[n-1] + memo[n-2];
 }
