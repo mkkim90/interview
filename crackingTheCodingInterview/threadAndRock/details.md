@@ -3,7 +3,9 @@
 - java.lang.Runnable 인터페이스를 구현하기
 - java.lang.Thread 클래스를 상속받기 
 
-### Runnable의 인터페이스 구현의 경우, 코드 예제는 다음과 같습니다.
+### Runnable의 인터페이스 구현
+
+예제 코드와 같이, Runnable 인터페이스를 상속받아서 run을 재정의하였습니다. 
 ```
 public class RunnableThreadExample implements Runnable {
     public int count = 0;
@@ -41,7 +43,9 @@ public static void main(String[] args) {
     }
 ```
 
-### Thread 클래스를 상속 구현의 경우, 코드 예제는 다음과 같습니다.
+### Thread 클래스를 상속 구현
+
+예제 코드와 같이, Thread 클래스를 상속받아서 run을 재정의하였습니다. 
 ```
 public class ThreadExample extends Thread {
     int count = 0;
@@ -83,6 +87,195 @@ public static void main(String[] args) {
 자바는 공유 자원에 대한 접근을 제어하기 위한 동기화 방법을 제공합니다.
 synchronized와 lock입니다. 
 
+
+### synchronzied 구현
+
+synchronized키워드를 사용할 때 공유 자원에 대한 접근을 제어할 수 있습니다. 이 키워드는 메서드에 적용할 수도 있고 특정한 코드 블록에 적용할 수도 있습니다.
+이 키워드를 통해 여러 스레드가 각은 객체를 동시에 실행하는 것을 방지해줍니다.
+
+Thread를 상속받은 MyClass
+```
+public class MyClass extends Thread {
+    private String name;
+    private MyObject myObj;
+
+    public MyClass(MyObject obj, String n) {
+        name = n;
+        myObj = obj;
+    }
+
+    public void run() {
+        if (name.equals("1")) {
+            myObj.foo(name);
+        } else {
+            myObj.bar(name);
+        }
+    }
+}
+```
+
+synchronized 키워드를 붙인 메서드 foo와 bar
+```
+public class MyObject {
+    public synchronized void foo(String name) {
+        try {
+            System.out.println("Thread" + name + ".foo() : starting");
+            Thread.sleep(100);
+            System.out.println("Thread" + name + ".foo() : ending");
+        } catch (InterruptedException exc) {
+            System.out.println("Thread" + name + " : interrupted.");
+        }
+    }
+
+    public synchronized void bar(String name) {
+        try {
+            System.out.println("Thread" + name + ".bar() : starting");
+            Thread.sleep(100);
+            System.out.println("Thread" + name + ".bar() : ending");
+        } catch (InterruptedException exc) {
+            System.out.println("Thread" + name + " : interrupted.");
+        }
+    }
+}
+```
+
+실제 구현 테스트 코드입니다.
+
+```
+public static void main(String[] args) {
+        /* 서로 다른 객체인 경우 동시에 MyObject.foo() 호출이 가능하다 */
+        MyObject obj1 = new MyObject();
+        MyObject obj2 = new MyObject();
+        MyClass thread1 = new MyClass(obj1, "1");
+        MyClass thread2 = new MyClass(obj2, "2");
+        thread1.start();
+        thread2.start();
+
+        /* 같은 obj를 가리키고 있는 경우에는 하나만 foo를 호출할 수 있고 다른 하나는 기다리고 있어야한다 */
+        MyClass thread3 = new MyClass(obj1, "1");
+        MyClass thread4 = new MyClass(obj1, "1");
+        thread3.start();
+        thread4.start();
+
+        /* 설사 하나는 foo를 호출하고 있고 다른 하나는 bar를 호출하여도 기다리고 있어야한다.*/
+        MyClass thread5 = new MyClass(obj1, "1");
+        MyClass thread6 = new MyClass(obj1, "4");
+        thread5.start();
+        thread6.start();
+}
+```
+
+상기 주석에 정리해놓긴 했는데, 다시 요약하면 같은 객체의 syncronized의 메서드를 서로 다른 쓰레드가 동시에 접근할 수 없습니다. 
+설사, 다른 syncronized메서드를 호출하여도 동시에 접근할 수 없습니다.
+하지만 서로 다른 객체의 syncronized의 메서드를 동시에 호출하는 것은 가능합니다. 
+
+
+### lock 구현
+
+좀 더 세밀하게 동기화를 제어하고 싶을 때는 락을 사용할 수 있습니다. 자원에 대한 접근을 동기화할 수 있으며, 스레드가 해당 자원을 접근하려면 우선 그 자원에 붙어 있는 락을 획득해야합니다.
+락을 쥐고 있을 수 있는 스레드는 하나뿐이며, 해당 공유 자원은 한번에 한 스레드만이 사용할 수 있습니다.
+
+```
+public class LockedATM {
+    private Lock lock;
+    private int balance = 100;
+
+    public LockedATM() {
+        lock = new ReentrantLock();
+    }
+
+    public int withdraw(int value) {
+        lock.lock();
+        int temp = balance;
+        try {
+            Thread.sleep(100);
+            temp = temp - value;
+            Thread.sleep(100);
+            balance = temp;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        lock.unlock();
+        return temp;
+    }
+
+    public int deposit(int value) {
+        lock.lock();
+        int temp = balance;
+        try {
+            System.out.println("입금 시작");
+            Thread.sleep(100);
+            temp = temp + value;
+            Thread.sleep(100);
+            System.out.println("입금 완료");
+            balance = temp;
+            System.out.println("현재 잔고 : "+ balance);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        lock.unlock();
+        return temp;
+    }
+
+    public int balance() {
+        return this.balance;
+    }
+```
+
+
+테스트 코드도 빠질 수 없지요. ATMThread를 구현하였고 입급처리 메서드를 호출하도록 하였습니다.
+
+```
+public class ATMThread extends Thread {
+    private int money;
+    private LockedATM atm;
+
+    public ATMThread(LockedATM atm, int money) {
+        this.atm = atm;
+        this.money = money;
+    }
+
+    public void run() {
+        atm.deposit(money);
+    }
+}
+
+public static void main(String[] args) {
+        LockedATM atm = new LockedATM();
+        ATMThread thread1 = new ATMThread(atm, 1000);
+        ATMThread thread2 = new ATMThread(atm, 1000);
+        ATMThread thread3 = new ATMThread(atm, 1000);
+        thread1.start();
+        thread2.start();
+        thread3.start();
+    }
+```
+상기 출력 결과는
+```
+입금 시작
+입금 완료
+현재 잔고 : 1100
+입금 시작
+입금 완료
+현재 잔고 : 2100
+입금 시작
+입금 완료
+현재 잔고 : 3100
+```
+
+락을 해제해보면 어떨까요?
+잔고에 대한 동기화처리가 되지 않기 때문에, 하기와 같이 불규칙한 결과를 초래합니다.
+```
+입금 시작
+입금 시작
+입금 시작
+입금 완료
+현재 잔고 : 1100
+입금 완료
+입금 완료
+현재 잔고 : 1100
+현재 잔고 : 1100
+```
 
 ## 교착상태와 교착상태 방지
 ```
