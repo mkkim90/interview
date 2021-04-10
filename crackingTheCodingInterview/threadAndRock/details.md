@@ -1,3 +1,89 @@
+## 자바의 스레드 
+자바에서 스레드를 구현하는 방법으로는 다음 두 가지가 있습니다. 
+- java.lang.Runnable 인터페이스를 구현하기
+- java.lang.Thread 클래스를 상속받기 
+
+### Runnable의 인터페이스 구현의 경우, 코드 예제는 다음과 같습니다.
+```
+public class RunnableThreadExample implements Runnable {
+    public int count = 0;
+
+    @Override
+    public void run() {
+        System.out.println("RunnableThread starting");
+        try {
+            while (count < 5) {
+                Thread.sleep(500);
+                count++;
+            }
+        } catch (InterruptedException exc) {
+            System.out.println("RunnableThread interrupted");
+        }
+
+        System.out.println("RunnableThread terminating");
+    }
+}
+```
+그리고 쓰레드에 RunnableThreadExample 객체 인스턴스를 넣어서 실행합니다.
+```
+public static void main(String[] args) {
+        RunnableThreadExample instance = new RunnableThreadExample();
+        Thread thread = new Thread(instance);
+        thread.start();
+
+        while (instance.count != 5) {
+            try {
+                Thread.sleep(250);
+            } catch (InterruptedException exc) {
+                exc.printStackTrace();
+            }
+        }
+    }
+```
+
+### Thread 클래스를 상속 구현의 경우, 코드 예제는 다음과 같습니다.
+```
+public class ThreadExample extends Thread {
+    int count = 0;
+
+    public void run() {
+        System.out.println("Thread starting");
+        try {
+            while (count < 5) {
+                Thread.sleep(500);
+                System.out.println("In Thread, count is " + count);
+                count++;
+            }
+        } catch (InterruptedException exc) {
+            System.out.println("Thread interrupted");
+        }
+        System.out.println("Thread terminating");
+    }
+}
+```
+그리고 쓰레드를 상속받았기에 ThreadExample로 직접 실행합니다.
+```
+public static void main(String[] args) {
+        ThreadExample instance = new ThreadExample();
+        instance.start();
+
+        while (instance.count != 5) {
+            try {
+                Thread.sleep(250);
+            } catch (InterruptedException exc) {
+                exc.printStackTrace();
+            }
+        }
+}
+```
+
+
+## 동기화와 락
+
+자바는 공유 자원에 대한 접근을 제어하기 위한 동기화 방법을 제공합니다.
+synchronized와 lock입니다. 
+
+
 ## 교착상태와 교착상태 방지
 ```
 교착상태란, 첫번째 스레드는 두번째 스레드가 들고 있는 객체의 락이 풀리기를 기다리고 있고, 두번째 스레드 역시 첫번째 스레드가 들고 있는 
