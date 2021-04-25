@@ -102,6 +102,7 @@ class Node {
 
 그래프를 탐색하는 일반적인 방법 두 가지로는 깊이 우선 탐색 (DFS - depth-first search)과 너비 우선 탐색(BFS - breadth-first search) 이 있다.
 
+![image](https://user-images.githubusercontent.com/46394672/115979972-10440b80-a5c4-11eb-8870-7a0affc8558c.png)
 
 
 
