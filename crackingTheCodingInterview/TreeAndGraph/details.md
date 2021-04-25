@@ -79,7 +79,8 @@ Node 0
 ```
 
 - 재귀 활용
-```void search(Node root) {
+```
+void search(Node root) {
 	if (root == null) return;
 	visit(root);
 	root.visited = true
