@@ -9,6 +9,27 @@
 
 이진탐색트리는 모든 노드가 '모든 왼쪽 자식들 <= n < 모든 오른쪽 자식들' 속성을 가져야합니다.
 
+![image](https://user-images.githubusercontent.com/46394672/115979806-08379c00-a5c3-11eb-9374-9bfcde99230c.png)
+
+## 균형VS비균형
+- 완전이진트리, 전이진트리, 포화이진트리
+
+### 완전 이진트리
+
+트리의 모든 높이에서 노드가 꽉 차 있는 이진 트리를 말합니다. 꽉차있지 않아도 되지만 노드가 왼쪽에서 오른쪽으로 채워져야합니다.
+
+![image](https://user-images.githubusercontent.com/46394672/115979842-3ae19480-a5c3-11eb-8c5e-b45123d6b409.png)
+
+### 전 이진트리
+
+모든 노드의 자식이 없거나 정확히 두개 있는 경우를 말합니다. 즉 자식이 하나만 있는 노드가 존재해서는 안됩니다.
+
+![image](https://user-images.githubusercontent.com/46394672/115979868-62386180-a5c3-11eb-938b-ecf14c5a58aa.png)
+
+
+### 포화 이진트리
+
+![image](https://user-images.githubusercontent.com/46394672/115979875-6f555080-a5c3-11eb-8ce8-b312fc71f1e3.png)
 
 
 ## 이진 트리 순회
@@ -80,6 +101,9 @@ class Node {
 ### 그래프 탐색 
 
 그래프를 탐색하는 일반적인 방법 두 가지로는 깊이 우선 탐색 (DFS - depth-first search)과 너비 우선 탐색(BFS - breadth-first search) 이 있다.
+
+
+
 
 #### DFS : 해당 분기를 완벽하게 탐색, 깊게 탐색
 ```
